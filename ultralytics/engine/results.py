@@ -404,12 +404,12 @@ class Results(SimpleClass):
                 # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 6], "|Red:", txt_color=(0, 0, 255))
                 # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 7], "|" + str(r_avg), txt_color=(0, 0, 255))
                 # one line
-                annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(c_con), txt_color=(255, 255, 255))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Blue:" + str(b_avg), txt_color=(255, 145, 48))
+                annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(c_con), txt_color=(0, 0, 0)) #black
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Blue:" + str(b_avg), txt_color=(255, 0, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Green:" + str(g_avg), txt_color=(0, 255, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_avg), txt_color=(0, 0, 255))
 
-                annotator.text([int(x0), int(y1) - y_bias * 4 - txt_bias * 2], "No." + str(id), txt_color=(255, 255, 255))
+                annotator.text([int(x0), int(y1) - y_bias * 6 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0)) #black
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
                 # the x0 of the last sample
