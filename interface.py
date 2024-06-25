@@ -10,7 +10,7 @@ con_detect =True #可以更改
 con_list = [30.7, 10, 50.9, 80, 1, 100, 120] #可以更改
 b_avg_list = []
 
-
+# Project存放位置： C:\Users\李肖夏\Desktop\Peng\Peng
 # 原始照片存放位置： C:\Users\李肖夏\Desktop\Peng\Peng\custom\detectImg\Peng
 # 线性公式存放位置： C:\Users\李肖夏\Desktop\Peng\Peng\custom\detectImg\formula
 # 识别照片生成位置： C:\Users\李肖夏\Desktop\Peng\Peng\runs\detect
