@@ -275,7 +275,7 @@ class Results(SimpleClass):
         if pred_boxes is not None and show_boxes:
             print('my detect++++++------------------------------------')
             print('show_boxes=', show_boxes)
-            from interface import x0_ratio, y0_ratio, x1_ratio, y1_ratio, con_detect, con_list, b_avg_list
+            from interface import x0_ratio, y0_ratio, x1_ratio, y1_ratio, con_detect, con_list
             from scipy import stats
             import os, json
             # print('pred_boxes cls=', pred_boxes.cls)
@@ -287,7 +287,7 @@ class Results(SimpleClass):
 
             index = 0
             # print('pred_boxes.cls', pred_boxes.cls)
-            b_avg_list.clear()
+            g_avg_list = []
 
             formula_path = os.path.join(os.path.dirname(os.path.dirname(self.path)), 'formula')
             if not os.path.exists(formula_path):
@@ -360,7 +360,7 @@ class Results(SimpleClass):
                 annotator.box_label(mybox, label="", color=(250,240,10))
 
                 if not con_detect:
-                    b_avg_list.append(b_avg)
+                    g_avg_list.append(g_avg)
                     c_con = con_list[id-1]
 
                 if con_detect:
@@ -371,8 +371,8 @@ class Results(SimpleClass):
                             # print('type(data_dic):', type(data_dic))
                             # print(data_dic['intercept'])
                             # print(data_dic['slope'])
-                        c_con = (b_avg - data_dic['intercept']) / data_dic['slope']
-                        # c_con = (-b_avg+154.53)/1.0529
+                        c_con = (g_avg - data_dic['intercept']) / data_dic['slope']
+                        # c_con = (-g_avg+154.53)/1.0529
                         c_con = round(c_con, 1)
 
                         # annotator.rectangle(xy=(x0_con, y0_con), width=5)
@@ -405,8 +405,8 @@ class Results(SimpleClass):
                 # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 7], "|" + str(r_avg), txt_color=(0, 0, 255))
                 # one line
                 annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(c_con), txt_color=(0, 0, 0)) #black
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Blue:" + str(b_avg), txt_color=(255, 0, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Green:" + str(g_avg), txt_color=(0, 255, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Green:" + str(g_avg), txt_color=(0, 255, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Blue:" + str(b_avg), txt_color=(255, 0, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_avg), txt_color=(0, 0, 255))
 
                 annotator.text([int(x0), int(y1) - y_bias * 6 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0)) #black
@@ -444,12 +444,12 @@ class Results(SimpleClass):
 
             if not con_detect:
                 # check if the number of concentration equal to blue value
-                if len(con_list) == len(b_avg_list):
-                    slope, intercept, r, p, std_err = stats.linregress(con_list, b_avg_list)
+                if len(con_list) == len(g_avg_list):
+                    slope, intercept, r, p, std_err = stats.linregress(con_list, g_avg_list)
                     with open(formula_file, 'w') as file:
                         json.dump({'slope':slope, 'intercept':intercept, 'R2':r}, file)
                     with open(blue_file, 'w') as file:
-                        json.dump(b_avg_list, file)
+                        json.dump(g_avg_list, file)
                     # os.path.dirname(self.path)
 
 
