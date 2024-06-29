@@ -379,6 +379,7 @@ class Results(SimpleClass):
                     # linear_reg_dict['Name']
                     # record the RGB and concentration in linear regression stage
                     linear_reg_dict['No.'].append(id)
+                    # print('id-1', id-1)
                     linear_reg_dict['Con.'].append(con_list[id-1])
                     linear_reg_dict['Red'].append(r_avg)
                     linear_reg_dict['Green'].append(g_avg)
@@ -468,12 +469,12 @@ class Results(SimpleClass):
                 # print('g_avg = ', g_avg)
                 # print('green_text = ', green_text)
 
-                annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(con_dis), txt_color=(255, 255, 255))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Blue:" + str(b_dis), txt_color=(255, 145, 48))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Green:" + str(g_dis), txt_color=(0, 255, 0))
+                annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(con_dis), txt_color=(0, 0, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Green:" + str(g_dis), txt_color=(0, 255, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Blue:" + str(b_dis), txt_color=(255, 0, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_dis), txt_color=(0, 0, 255))
 
-                annotator.text([int(x0), int(y1) - y_bias * 4 - txt_bias * 2], "No." + str(id), txt_color=(255, 255, 255))
+                annotator.text([int(x0), int(y1) - y_bias * 6 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
                 # the x0 of the last sample
