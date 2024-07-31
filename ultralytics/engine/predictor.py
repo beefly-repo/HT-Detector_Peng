@@ -85,10 +85,17 @@ class BasePredictor:
             cfg (str, optional): Path to a configuration file. Defaults to DEFAULT_CFG.
             overrides (dict, optional): Configuration overrides. Defaults to None.
         """
+        # print("--overrides--:", overrides)
+        # print('myowrn start')
         self.args = get_cfg(cfg, overrides)
+        # print('myowrn end')
+        # print('self.args=', self.args)
         self.save_dir = get_save_dir(self.args)
         if self.args.conf is None:
             self.args.conf = 0.25  # default conf=0.25
+            # print('=====default=====: self.args.conf=',self.args.conf)
+        print('=====changed=====: self.args.conf=', self.args.conf)
+        # print('self.args=',self.args)
         self.done_warmup = False
         if self.args.show:
             self.args.show = check_imshow(warn=True)

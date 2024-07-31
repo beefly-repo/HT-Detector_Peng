@@ -437,8 +437,9 @@ class Model(nn.Module):
             x in ARGV for x in ("predict", "track", "mode=predict", "mode=track")
         )
 
-        custom = {"conf": 0.25, "batch": 1, "save": is_cli, "mode": "predict"}  # method defaults
+        custom = {"conf": 0.85, "batch": 1, "save": is_cli, "mode": "predict"}  # method defaults # original -> "conf": 0.25
         args = {**self.overrides, **custom, **kwargs}  # highest priority args on the right
+        # print("engine-model/args=:", args)
         prompts = args.pop("prompts", None)  # for SAM-type models
 
         if not self.predictor:

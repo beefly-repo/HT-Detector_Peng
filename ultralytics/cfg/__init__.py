@@ -183,10 +183,14 @@ def cfg2dict(cfg):
     Returns:
         cfg (dict): Configuration object in dictionary format.
     """
+    # print("cfg begin==========", cfg)
     if isinstance(cfg, (str, Path)):
         cfg = yaml_load(cfg)  # load dict
+        # print('cfg yaml_load=========', cfg)
     elif isinstance(cfg, SimpleNamespace):
         cfg = vars(cfg)  # convert to dict
+        # print('cfg vars=========', cfg)
+    # print("cfg end==========", cfg)
     return cfg
 
 
@@ -201,10 +205,13 @@ def get_cfg(cfg: Union[str, Path, Dict, SimpleNamespace] = DEFAULT_CFG_DICT, ove
     Returns:
         (SimpleNamespace): Training arguments namespace.
     """
+    # print('dfg2dict start')
     cfg = cfg2dict(cfg)
+    # print('dfg2dict end')
 
     # Merge overrides
     if overrides:
+        # print("overrides=", overrides)
         overrides = cfg2dict(overrides)
         if "save_dir" not in cfg:
             overrides.pop("save_dir", None)  # special override keys to ignore
