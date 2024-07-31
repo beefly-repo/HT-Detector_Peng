@@ -347,8 +347,8 @@ class Results(SimpleClass):
             # #         x0, y0, x1, y1 = pred_boxes.xyxy[index][0].item(), pred_boxes.xyxy[index][1].item(), pred_boxes.xyxy[index][2].item(), pred_boxes.xyxy[index][3].item()
             # #         _, _,  w,  h = pred_boxes.xywh[index][0].item(), pred_boxes.xywh[index][1].item(), pred_boxes.xywh[index][2].item(), pred_boxes.xywh[index][3].item()
             #
-                y_bias = 150
-                txt_bias = 80
+                y_bias = 110
+                txt_bias = 70
                 if False: #center point and extend area
                     x_ratio = 1/2
                     y_ratio = 2/3
@@ -474,7 +474,7 @@ class Results(SimpleClass):
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Blue:" + str(b_dis), txt_color=(255, 0, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_dis), txt_color=(0, 0, 255))
 
-                annotator.text([int(x0), int(y1) - y_bias * 6 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
+                annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
                 # the x0 of the last sample
