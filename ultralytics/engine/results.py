@@ -332,6 +332,8 @@ class Results(SimpleClass):
             have_table = False
             if have_table: x0_last = 0
             if have_table: overall_list = [('No.', 'Con.', 'Blue', 'Green', 'Red')] # the overall list of the ids, concentrations, and RGBs
+            id_dict = {} # save the ids and their corresponding positions in a dictionary
+            light_dict = {} # save the lights and their corresponding positions in a dictionary
             # handle each sample in one image
             for coor in coor_list:
                 # print('coor', coor)
@@ -474,15 +476,40 @@ class Results(SimpleClass):
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Blue:" + str(b_dis), txt_color=(255, 0, 0))
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_dis), txt_color=(0, 0, 255))
 
-                annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
+                # annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
+                if con_dis < 5:
+                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/green.png')
+                elif con_dis > 30:
+                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/red.png')
+                else: # 5<con_dis<30
+                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/yellow.png')
+                id_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2]
+                light_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
+
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
                 # the x0 of the last sample
                 if have_table: x0_last = x0
                 # print('x0_last =================== x0:', x0)
                 id = id + 1
+            # draw the id and show the lights
+            # make the id have the same y position
+            y_min = min([id_dict[key][1] for key in id_dict.keys()])
+            for key in id_dict.keys():
+                id_dict[key][1] = y_min
+            # annotate the image with ids
+            for key in id_dict.keys():
+                annotator.text(id_dict[key], "No." + key, txt_color=(0, 0, 0))
+                # print(id_dict[key])
+                # print(min([id_dict[key][1] for key in id_dict.keys()]))
+            # light_dict
+            # make the light position have the same y position
+            ylight_min = min([light_dict[key][1] for key in light_dict.keys()])
+            for key in light_dict.keys():
+                light_dict[key][1] = ylight_min
 
-                # index = index + 1 # archieve
+
+            # index = index + 1 # archieve
             # coor_list.sort() # archieve
             # id = 1
             # for item in coor_list:
