@@ -203,11 +203,20 @@ class Annotator:
                 # print('parameters=', parameters)
                 # print('show_conf=',show_conf)
                 if show_confidence:
-                    bias = -30
-                    bias1 = -35
+                    if parameters['line_width'] == 4:
+                        bias = 0 # -30 # line_width=5
+                        bias1 = -4 # -35 # line_width=5
+                    else:
+                        bias = -30  #  line_width=5
+                        bias1 = -35  #  line_width=5
                 else:
-                    bias = 43
-                    bias1 = 44# yue
+                    if parameters['line_width'] == 4:
+                        bias = 55 # 43 # line_width=5
+                        bias1 = 52 # 44 # line_width=5  # yue
+                    else:
+                        bias = 43 #  line_width=5
+                        bias1 = 44  #  line_width=5  # yue
+
                 cv2.rectangle(self.im, (p1[0]+bias,p1[1]), (p2[0]+bias1, p2[1]), color, -1, cv2.LINE_AA)  # filled yue
                 # print('my label:', label)
                 # print('p1[0]:', p1[0])
