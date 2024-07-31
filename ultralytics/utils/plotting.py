@@ -181,6 +181,7 @@ class Annotator:
                 # self.draw.text((box[0], box[1]), label, fill=txt_color, font=self.font, anchor='ls')  # for PIL>8.0
                 self.draw.text((p1[0], p1[1] - h if outside else p1[1]), label, fill=txt_color, font=self.font)
         else:  # cv2
+            # print("cv2")
             if rotated:
                 p1 = [int(b) for b in box[0]]
                 # NOTE: cv2-version polylines needs np.asarray type.
@@ -192,12 +193,29 @@ class Annotator:
                 w, h = cv2.getTextSize(label, 0, fontScale=self.sf, thickness=self.tf)[0]  # text width, height
                 outside = p1[1] - h >= 3
                 p2 = p1[0] + w, p1[1] - h - 3 if outside else p1[1] + h + 3
-                cv2.rectangle(self.im, p1, p2, color, -1, cv2.LINE_AA)  # filled
+                # cv2.rectangle(self.im, p1, p2, color, -1, cv2.LINE_AA)  # filled
+                # from interface import show_conf
+                import yaml,os
+                yaml_file_path = os.path.join(os.getcwd(), 'ultralytics/cfg/default.yaml')
+                with open(yaml_file_path, 'r') as file:
+                    parameters = yaml.safe_load(file)
+                show_confidence = parameters['show_conf']
+                # print('parameters=', parameters)
+                # print('show_conf=',show_conf)
+                if show_confidence:
+                    bias = -30
+                    bias1 = -35
+                else:
+                    bias = 43
+                    bias1 = 44# yue
+                cv2.rectangle(self.im, (p1[0]+bias,p1[1]), (p2[0]+bias1, p2[1]), color, -1, cv2.LINE_AA)  # filled yue
                 # print('my label:', label)
+                # print('p1[0]:', p1[0])
+                # print('p1:', p1)
                 cv2.putText(
                     self.im,
                     label,
-                    (p1[0], p1[1] - 2 if outside else p1[1] + h + 2),
+                    (p1[0]+bias, p1[1] - 2 if outside else p1[1] + h + 2), # yue
                     0,
                     self.sf,
                     txt_color,
