@@ -351,6 +351,40 @@ class Annotator:
                 txt_color = (255, 255, 255)
             cv2.putText(self.im, text, xy, 0, self.sf, txt_color, thickness=self.tf, lineType=cv2.LINE_AA)
 
+    def pasteimage(self, light_size, light_dict):
+        if self.pil:
+            pass
+        else:
+            # from PIL import Image
+            # annotator.fromarray(self.im)
+            print('strat-type-self.im=', type(self.im))
+            # rgb_image = cv2.cvtColor(self.im, cv2.COLOR_BGR2RGB) # PIL->RGB, numpy->BGR
+            bgr_img = Image.fromarray(self.im, mode="RGB")
+            # annotator.im.show()
+            # bgr_img.show()
+            # pil_img.show()
+            # print('type-pil_img=', type(pil_img))
+            # background = self.im.convert('RGBA')
+            background = bgr_img.convert('RGBA') #Open the background image
+            # light_size = 200
+            for key in light_dict.keys():  # add the lights
+                print('light_dict-light=', light_dict[key][2])
+                # img = cv2.imread(light_dict[key][2]) # BGR color
+                # bgr_img_light = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+                # im_pil = Image.fromarray(img)
+                image_to_paste = Image.open(light_dict[key][2]).resize((light_size, light_size))  # .convert('RGBA') # Open the image to be pasted
+                position = (light_dict[key][0], light_dict[key][1])  # Define the position where the image should be pasted
+                img_with_light = Image.new("RGBA", background.size)  # Paste the image onto the background
+                img_with_light.paste(background, (0, 0), background)
+                img_with_light.paste(image_to_paste, position, image_to_paste)
+                background = img_with_light
+                # img_with_light.convert('RGB')#.save("rrrgggbbb.jpg")
+            background = background.convert('RGB')
+            self.im = np.asarray(background).copy()
+            print('end-type-self.im=', type(self.im))
+            Image.fromarray(self.im, mode="RGB").show()
+            # background.show()
+
     def fromarray(self, im):
         """Update self.im from a numpy array."""
         self.im = im if isinstance(im, Image.Image) else Image.fromarray(im)
