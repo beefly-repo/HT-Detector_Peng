@@ -277,7 +277,8 @@ class Results(SimpleClass):
             print('my detect++++++------------------------------------')
             print('show_boxes=', show_boxes)
             from interface import (x0_ratio, y0_ratio, x1_ratio, y1_ratio, mode, con_list,
-                                    rgb_calculate_accuracy,rgb_display_accuracy, con_display_accuracy, color_channel, results_dir)
+                                    rgb_calculate_accuracy,rgb_display_accuracy, con_display_accuracy,
+                                   color_channel, results_dir, add_light)
             from scipy import stats
             import os, json
 
@@ -477,14 +478,15 @@ class Results(SimpleClass):
                 annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_dis), txt_color=(0, 0, 255))
 
                 # annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
-                if con_dis < 5:
-                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/green.png')
-                elif con_dis > 30:
-                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/red.png')
-                else: # 5<con_dis<30
-                    light = os.path.join(os.getcwd(), 'custom/detectImg/lightImg/yellow.png')
+                if add_light:
+                    if con_dis < 5:
+                        light = os.path.join(os.getcwd(), 'custom/lightImg/green_BGR.png')
+                    elif con_dis > 30:
+                        light = os.path.join(os.getcwd(), 'custom/lightImg/red_BGR.png')
+                    else: # 5<con_dis<30
+                        light = os.path.join(os.getcwd(), 'custom/lightImg/yellow_BGR.png')
+                    light_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
                 id_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2]
-                light_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
 
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
@@ -503,10 +505,19 @@ class Results(SimpleClass):
                 # print(id_dict[key])
                 # print(min([id_dict[key][1] for key in id_dict.keys()]))
             # light_dict
-            # make the light position have the same y position
-            ylight_min = min([light_dict[key][1] for key in light_dict.keys()])
-            for key in light_dict.keys():
-                light_dict[key][1] = ylight_min
+            if add_light:
+                # make the light position have the same y position
+                ylight_min = min([light_dict[key][1] for key in light_dict.keys()])
+                for key in light_dict.keys():
+                    light_dict[key][1] = ylight_min
+                annotator.pasteimage(light_size=200, light_dict=light_dict)
+
+            # print('img_name=', img_name)
+            # print('self.path=', self.path)
+            # print('type(im)=', type(self.orig_img))
+            # print('self.orig_img=', self.orig_img)
+            # print('annotator.im:', annotator.im)
+            # print('annotator.im-type:', type(annotator.im))
 
 
             # index = index + 1 # archieve
@@ -604,8 +615,9 @@ class Results(SimpleClass):
 
         # Save results
         if save:
+            # print('save.filename=', filename)
             annotator.save(filename)
-
+        # print('status(save)=', save)
         return annotator.result()
 
 
@@ -673,6 +685,7 @@ class Results(SimpleClass):
         if not filename:
             filename = f"results_{Path(self.path).name}"
         self.plot(save=True, filename=filename, *args, **kwargs)
+        print('filenameinsave=', filename)
         return filename
 
     def verbose(self):
