@@ -368,7 +368,7 @@ class Annotator:
             background = bgr_img.convert('RGBA') #Open the background image
             # light_size = 200
             for key in light_dict.keys():  # add the lights
-                print('light_dict-light=', light_dict[key][2])
+                # print('light_dict-light=', light_dict[key][2])
                 # img = cv2.imread(light_dict[key][2]) # BGR color
                 # bgr_img_light = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
                 # im_pil = Image.fromarray(img)
@@ -381,8 +381,8 @@ class Annotator:
                 # img_with_light.convert('RGB')#.save("rrrgggbbb.jpg")
             background = background.convert('RGB')
             self.im = np.asarray(background).copy()
-            print('end-type-self.im=', type(self.im))
-            Image.fromarray(self.im, mode="RGB").show()
+            # print('end-type-self.im=', type(self.im))
+            # Image.fromarray(self.im, mode="RGB").show()
             # background.show()
 
     def fromarray(self, im):
