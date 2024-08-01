@@ -194,7 +194,7 @@ class Annotator:
                 outside = p1[1] - h >= 3
                 p2 = p1[0] + w, p1[1] - h - 3 if outside else p1[1] + h + 3
                 # cv2.rectangle(self.im, p1, p2, color, -1, cv2.LINE_AA)  # filled
-                # load the cfg from default.yaml
+                # load the cfg from default.yaml yue
                 import yaml,os
                 yaml_file_path = os.path.join(os.getcwd(), 'ultralytics/cfg/default.yaml')
                 with open(yaml_file_path, 'r') as file:
@@ -208,8 +208,8 @@ class Annotator:
                         bias = 0 # -30 # line_width=5
                         bias1 = -4 # -35 # line_width=5
                     else:
-                        bias = -30  #  line_width=5
-                        bias1 = -35  #  line_width=5
+                        bias = -12  #  line_width=5
+                        bias1 = -12  #  line_width=5
                 else:
                     if parameters['line_width'] == 4:
                         bias = 55 # 43 # line_width=5
