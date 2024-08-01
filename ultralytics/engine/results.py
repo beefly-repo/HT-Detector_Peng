@@ -473,9 +473,9 @@ class Results(SimpleClass):
                 # print('green_text = ', green_text)
 
                 annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(con_dis), txt_color=(0, 0, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "Green:" + str(g_dis), txt_color=(0, 255, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "Blue:" + str(b_dis), txt_color=(255, 0, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "Red:" + str(r_dis), txt_color=(0, 0, 255))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "G:" + str(g_dis), txt_color=(0, 255, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "B:" + str(b_dis), txt_color=(255, 0, 0))
+                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "R:" + str(r_dis), txt_color=(0, 0, 255))
 
                 # annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
                 if add_light:
@@ -485,8 +485,8 @@ class Results(SimpleClass):
                         light = os.path.join(os.getcwd(), 'custom/lightImg/red_BGR.png')
                     else: # 5<con_dis<30
                         light = os.path.join(os.getcwd(), 'custom/lightImg/yellow_BGR.png')
-                    light_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
-                id_dict[str(id)] = [int(x0), int(y1) - y_bias * 8 - txt_bias * 2]
+                    light_dict[str(id)] = [int(x0)+15, int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
+                id_dict[str(id)] = [int(x0)+50, int(y1) - y_bias * 8 - txt_bias * 2]
 
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
@@ -590,7 +590,7 @@ class Results(SimpleClass):
             for d in reversed(pred_boxes):
                 c, conf, id = int(d.cls), float(d.conf) if conf else None, None if d.id is None else int(d.id.item())
                 name = ("" if id is None else f"id:{id} ") + names[c]
-                label = (f"{name} {conf:.2f}" if conf else name) if labels else None
+                label = (f"{name}{conf:.2f}" if conf else name) if labels else None
                 # label = f"{name}" if name else None
                 box = d.xyxyxyxy.reshape(-1, 4, 2).squeeze() if is_obb else d.xyxy.squeeze()
                 # print('box=', box)
