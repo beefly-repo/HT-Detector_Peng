@@ -24,7 +24,7 @@ con_display_accuracy = 2 #可以更改
 #选择相应的颜色通道
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #是否添加指示灯
-add_light = True
+add_light = False
 
 
 # 升级功能
