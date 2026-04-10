@@ -401,8 +401,7 @@ class Results(SimpleClass):
                     # print('xywh_con', x0_con, y0_con, x1_con, y1_con, w_con, h_con)
                 # calculate the average RGB values of a sample in one image
                 # r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
-                im_arr = annotator.im if isinstance(annotator.im, np.ndarray) else np.array(annotator.im)[..., ::-1]
-                r_avg, g_avg, b_avg = self.calAvgRgb(im_arr, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
+                r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
 
                 # mark the concentration area
                 mybox = torch.tensor([x0_con, y0_con, x1_con, y1_con], device='cuda:0')
@@ -688,35 +687,37 @@ class Results(SimpleClass):
         return dict_result  # {key:list[]}
 
     def calAvgRgb(self, img, x, y, w, h, accuracy=16):
-        """calculate the average RGB values of a selected area to a certain accuracy"""
+        """calculate the average RGB values of a selected area to a certain accuracy.
+        Supports both cv2 (BGR numpy array) and PIL (RGB Image) input formats."""
         if 0 == w or 0 == h:
             return False
-        r_sum = 0
-        g_sum = 0
-        b_sum = 0
-        for width in range(w):
-            for height in range(h):
-                b, g, r = img[y + height, x + width]
-                #                print('h:',h,'s:',s,'v:',v)
-                r_sum = r_sum + r
-                g_sum = g_sum + g
-                b_sum = b_sum + b
-        #        print('a_sum =', a_sum)
-        #        print('b_sum =', b_sum)
-        #        print('c_sum =', c_sum)
 
-        self.accuracy = accuracy
-        # print('w*h=', w*h)
-        #        print('self.accuracy', self.accuracy)
-        if self.accuracy == 0:
-            r_avg = round(r_sum / (w * h))
-            g_avg = round(g_sum / (w * h))
-            b_avg = round(b_sum / (w * h))
+        # Convert to numpy array with RGB channel order
+        from PIL import Image
+        if isinstance(img, Image.Image):
+            # PIL Image: already RGB
+            img_arr = np.array(img)
+        elif isinstance(img, np.ndarray):
+            # cv2 numpy array: BGR -> RGB
+            img_arr = img[..., ::-1]
         else:
-            r_avg = round(r_sum / (w * h), self.accuracy)
-            g_avg = round(g_sum / (w * h), self.accuracy)
-            b_avg = round(b_sum / (w * h), self.accuracy)
-        #        print('a_avg', a_avg, 'b_avg', b_avg, 'c_avg', c_avg)
+            raise TypeError(f"Unsupported image type: {type(img)}")
+
+        # Crop the region and compute mean using vectorized operations
+        region = img_arr[y:y + h, x:x + w]
+        pixel_count = w * h
+        r_sum = region[:, :, 0].sum()
+        g_sum = region[:, :, 1].sum()
+        b_sum = region[:, :, 2].sum()
+
+        if accuracy == 0:
+            r_avg = round(r_sum / pixel_count)
+            g_avg = round(g_sum / pixel_count)
+            b_avg = round(b_sum / pixel_count)
+        else:
+            r_avg = round(float(r_sum / pixel_count), accuracy)
+            g_avg = round(float(g_sum / pixel_count), accuracy)
+            b_avg = round(float(b_sum / pixel_count), accuracy)
 
         return r_avg, g_avg, b_avg
 
