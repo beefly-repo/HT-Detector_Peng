@@ -507,7 +507,7 @@ class Results(SimpleClass):
                 # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "B:" + str(b_dis), txt_color=(255, 0, 0))
                 # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "R:" + str(r_dis), txt_color=(0, 0, 255))
 #改动3
-                con_dict[str(id)] = [int(x0), con_dis, g_dis, b_dis, r_dis]
+                con_dict[str(id)] = [int(cuvette_boxes[id - 1][0]), con_dis, r_dis, g_dis, b_dis]
                 # annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
                 if add_light:
                     if con_dis < 5:
@@ -547,9 +547,9 @@ class Results(SimpleClass):
             for key in con_dict.keys():
                 x = con_dict[key][0]
                 annotator.text([x, con_y], "Con.:" + str(con_dict[key][1]), txt_color=(0, 0, 0))
-                annotator.text([x, con_y + txt_bias * 1], "G:" + str(con_dict[key][2]), txt_color=(0, 255, 0))
-                annotator.text([x, con_y + txt_bias * 2], "B:" + str(con_dict[key][3]), txt_color=(255, 0, 0))
-                annotator.text([x, con_y + txt_bias * 3], "R:" + str(con_dict[key][4]), txt_color=(0, 0, 255))
+                annotator.text([x, con_y + txt_bias * 1], "R:" + str(con_dict[key][2]), txt_color=(255, 0, 0))
+                annotator.text([x, con_y + txt_bias * 2], "G:" + str(con_dict[key][3]), txt_color=(0, 128, 0))
+                annotator.text([x, con_y + txt_bias * 3], "B:" + str(con_dict[key][4]), txt_color=(0, 0, 255))
 
             # light_dict
             if add_light:
