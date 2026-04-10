@@ -7,21 +7,21 @@ detection_dir = os.path.join(os.getcwd(), 'custom/linear_detection/detection/') 
 results_dir = os.path.join(os.getcwd(), 'runs/detect/results/') #不用更改
 
 #选择框的左上角点位置
-x0_ratio = 1.73/8 #可以更改
-y0_ratio = 2.73/8 #可以更改
+x0_ratio = 3/8 #可以更改
+y0_ratio = 4/8 #可以更改
 #选择框的右下角点位置
-x1_ratio = 5.6/8 #可以更改
-y1_ratio = 5.6/9 #可以更改
+x1_ratio = 5/8 #可以更改
+y1_ratio = 6/8 #可以更改
 #获取线性公式设置为 linear，获取识别结果设置为 detection
 mode = 'detection' # 'linear' or 'detection' 可以更改只能选择这两个之一
 #获取线性公式时，需要手动输入浓度值，个数一定严格和比色皿数量比配
-con_list = [1, 10, 20, 30, 40] #可以更改
+con_list = [0, 0.01, 0.05, 0.1, 0.5, 1 ,2, 5, 10] #可以更改
 #计算RGB平均值用到的小数点位数，如不提供程序默认16位
 rgb_calculate_accuracy = 16 #可以更改
 #图片显示RGB和Con.的小数点位数，可以单独控制
 rgb_display_accuracy = 2 #可以更改
 con_display_accuracy = 2 #可以更改
-#选择相应的颜色通道
+#选择相应的颜色通道+++++++++++
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #是否添加指示灯
 add_light = False

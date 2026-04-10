@@ -252,9 +252,10 @@ class Results(SimpleClass):
         annotator = Annotator(
             deepcopy(self.orig_img if img is None else img),
             line_width,
-            font_size,
-            font,
-            pil or (pred_probs is not None and show_probs),  # Classify tasks default to pil=True
+            font_size=60,
+            font="Arial.ttf",
+            # pil or (pred_probs is not None and show_probs),  # Classify tasks default to pil=True
+            pil=True,
             example=names,
         )
 
@@ -312,7 +313,23 @@ class Results(SimpleClass):
             # print('img_name=', img_name)
             #check mode and color channel, the default is mode='linear', color_channel='B'
             if mode not in ['linear', 'detection']: mode = 'linear'
-            if color_channel not in ['R', 'G', 'B']: color_channel = 'B'
+
+            # if color_channel not in ['R', 'G', 'B']: color_channel = 'B'
+##改动1
+            # 收集所有 cuvette(class==0) 框的 y0(顶部) 和 y1(底部)
+            cuvette_y0_list = []
+            cuvette_y1_list = []
+            cuvette_x0_list = []  # 新增
+            cuvette_x1_list = []  # 新增
+            cuvette_index = 0
+            for item in pred_boxes.cls:
+                if item.item() == 0:  # cuvette class
+                    cuvette_x0_list.append(pred_boxes.xyxy[cuvette_index][0].item())  # 新增
+                    cuvette_y0_list.append(pred_boxes.xyxy[cuvette_index][1].item())
+                    cuvette_x1_list.append(pred_boxes.xyxy[cuvette_index][2].item())  # 新增
+                    cuvette_y1_list.append(pred_boxes.xyxy[cuvette_index][3].item())
+                cuvette_index = cuvette_index + 1
+            cuvette_boxes = sorted(zip(cuvette_x0_list, cuvette_x1_list), key=lambda b: b[0])  # 新增
 
             # sort the coordinates of the expected class
             for item in pred_boxes.cls:
@@ -333,8 +350,19 @@ class Results(SimpleClass):
             have_table = False
             if have_table: x0_last = 0
             if have_table: overall_list = [('No.', 'Con.', 'Blue', 'Green', 'Red')] # the overall list of the ids, concentrations, and RGBs
+
             id_dict = {} # save the ids and their corresponding positions in a dictionary
             light_dict = {} # save the lights and their corresponding positions in a dictionary
+#改动2
+            con_dict = {}  # 存储每个样本的 Con./RGB 信息，延迟到循环外统一绘制
+            # 计算 No. 的统一 y 坐标：所有 cuvette 框顶部最小值 - cuvette标签文字高度 - 100
+            # 注意：cuvette 标签文字绘制在框顶部之上，这里用 annotator 的字体来获取文字高度
+            cuvette_label_h = annotator.font.getsize("cuvette")[1] if hasattr(annotator, 'font') else 40
+            no_label_h = annotator.font.getsize("No.1")[1] if hasattr(annotator, 'font') else 40  # 新增
+            no_y = int(min(cuvette_y0_list)) - cuvette_label_h - 50 - no_label_h  # 修改：100 → 50，减去 No.1 文字高度
+            # 计算 Con. 的统一 y 坐标：所有 cuvette 框底部最大值 + 100
+            con_y = int(max(cuvette_y1_list)) + 50
+
             # handle each sample in one image
             for coor in coor_list:
                 # print('coor', coor)
@@ -372,7 +400,9 @@ class Results(SimpleClass):
                     w_con, h_con = (x1_con - x0_con), (y1_con - y0_con)
                     # print('xywh_con', x0_con, y0_con, x1_con, y1_con, w_con, h_con)
                 # calculate the average RGB values of a sample in one image
-                r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
+                # r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
+                im_arr = annotator.im if isinstance(annotator.im, np.ndarray) else np.array(annotator.im)[..., ::-1]
+                r_avg, g_avg, b_avg = self.calAvgRgb(im_arr, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
 
                 # mark the concentration area
                 mybox = torch.tensor([x0_con, y0_con, x1_con, y1_con], device='cuda:0')
@@ -472,11 +502,12 @@ class Results(SimpleClass):
                 # print('g_avg = ', g_avg)
                 # print('green_text = ', green_text)
 
-                annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(con_dis), txt_color=(0, 0, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "G:" + str(g_dis), txt_color=(0, 255, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "B:" + str(b_dis), txt_color=(255, 0, 0))
-                annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "R:" + str(r_dis), txt_color=(0, 0, 255))
-
+                # annotator.text([int(x0), int(y1) + y_bias], "Con.:" + str(con_dis), txt_color=(0, 0, 0))
+                # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 1], "G:" + str(g_dis), txt_color=(0, 255, 0))
+                # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 2], "B:" + str(b_dis), txt_color=(255, 0, 0))
+                # annotator.text([int(x0), int(y1) + y_bias + txt_bias * 3], "R:" + str(r_dis), txt_color=(0, 0, 255))
+#改动3
+                con_dict[str(id)] = [int(x0), con_dis, g_dis, b_dis, r_dis]
                 # annotator.text([int(x0), int(y1) - y_bias * 8 - txt_bias * 2], "No." + str(id), txt_color=(0, 0, 0))
                 if add_light:
                     if con_dis < 5:
@@ -486,7 +517,11 @@ class Results(SimpleClass):
                     else: # 5<con_dis<30
                         light = os.path.join(os.getcwd(), 'custom/lightImg/yellow_BGR.png')
                     light_dict[str(id)] = [int(x0)+15, int(y1) - y_bias * 8 - txt_bias * 2 - 300, light]
-                id_dict[str(id)] = [int(x0)+50, int(y1) - y_bias * 8 - txt_bias * 2]
+                # id_dict[str(id)] = [int(x0)+50, int(y1) - y_bias * 8 - int(txt_bias * 3.5)]
+#改动4
+                no_text_w = annotator.font.getsize("No." + str(id))[0] if hasattr(annotator, 'font') else 80  # 新增
+                cuvette_center_x = (cuvette_boxes[id - 1][0] + cuvette_boxes[id - 1][1]) / 2  # 新增
+                id_dict[str(id)] = [int(cuvette_center_x - no_text_w / 2), no_y]  # 修改
 
                 # add c_con, b_avg, g_avg, r_avg to the overall list
                 if have_table: overall_list.append((id, c_con, b_avg, g_avg, r_avg))
@@ -496,14 +531,26 @@ class Results(SimpleClass):
                 id = id + 1
             # draw the id and show the lights
             # make the id have the same y position
-            y_min = min([id_dict[key][1] for key in id_dict.keys()])
-            for key in id_dict.keys():
-                id_dict[key][1] = y_min
+
+            # y_min = min([id_dict[key][1] for key in id_dict.keys()])
+            # for key in id_dict.keys():
+            #     id_dict[key][1] = y_min
+
             # annotate the image with ids
             for key in id_dict.keys():
                 annotator.text(id_dict[key], "No." + key, txt_color=(0, 0, 0))
                 # print(id_dict[key])
                 # print(min([id_dict[key][1] for key in id_dict.keys()]))
+#改动5
+            # 统一绘制 Con./G/B/R 文字，使用 con_y 作为统一 y 坐标
+            txt_bias = 70
+            for key in con_dict.keys():
+                x = con_dict[key][0]
+                annotator.text([x, con_y], "Con.:" + str(con_dict[key][1]), txt_color=(0, 0, 0))
+                annotator.text([x, con_y + txt_bias * 1], "G:" + str(con_dict[key][2]), txt_color=(0, 255, 0))
+                annotator.text([x, con_y + txt_bias * 2], "B:" + str(con_dict[key][3]), txt_color=(255, 0, 0))
+                annotator.text([x, con_y + txt_bias * 3], "R:" + str(con_dict[key][4]), txt_color=(0, 0, 255))
+
             # light_dict
             if add_light:
                 # make the light position have the same y position

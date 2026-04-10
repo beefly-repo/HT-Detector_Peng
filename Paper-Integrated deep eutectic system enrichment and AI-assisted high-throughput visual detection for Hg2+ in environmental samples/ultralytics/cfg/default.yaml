@@ -75,7 +75,7 @@ show_labels: True # (bool) show prediction labels, i.e. 'person'
 
 
 
-show_conf: True # (bool) show prediction confidence, i.e. '0.99'
+show_conf: False # (bool) show prediction confidence, i.e. '0.99'
 line_width: 5 # (int, optional) line width of the bounding boxes. Scaled to image size if None.
 
 

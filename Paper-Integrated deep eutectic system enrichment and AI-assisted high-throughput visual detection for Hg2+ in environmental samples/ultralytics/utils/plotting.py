@@ -171,15 +171,28 @@ class Annotator:
             else:
                 p1 = (box[0], box[1])
                 self.draw.rectangle(box, width=self.lw, outline=color)  # box
-            if label:
-                w, h = self.font.getsize(label)  # text width, height
-                outside = p1[1] - h >= 0  # label fits outside box
+            # if label: # original
+            #     w, h = self.font.getsize(label)  # text width, height
+            #     outside = p1[1] - h >= 0  # label fits outside box
+            #     self.draw.rectangle(
+            #         (p1[0], p1[1] - h if outside else p1[1], p1[0] + w + 1, p1[1] + 1 if outside else p1[1] + h + 1),
+            #         fill=color,
+            #     )
+            #     # self.draw.text((box[0], box[1]), label, fill=txt_color, font=self.font, anchor='ls')  # for PIL>8.0
+            #     self.draw.text((p1[0], p1[1] - h if outside else p1[1]), label, fill=txt_color, font=self.font)
+            if label: #yue
+                w, h = self.font.getsize(label)
+                outside = p1[1] - h >= 0
+                box_w = box[2] - box[0]  # 识别框宽度
+                # 背景宽度 = 识别框宽度
                 self.draw.rectangle(
-                    (p1[0], p1[1] - h if outside else p1[1], p1[0] + w + 1, p1[1] + 1 if outside else p1[1] + h + 1),
+                    (p1[0], p1[1] - h if outside else p1[1], p1[0] + box_w, p1[1] + 1 if outside else p1[1] + h + 1),
                     fill=color,
                 )
-                # self.draw.text((box[0], box[1]), label, fill=txt_color, font=self.font, anchor='ls')  # for PIL>8.0
-                self.draw.text((p1[0], p1[1] - h if outside else p1[1]), label, fill=txt_color, font=self.font)
+                # 文字在背景中居中
+                text_x = p1[0] + (box_w - w) / 2
+                self.draw.text((text_x, p1[1] - h if outside else p1[1]), label, fill=txt_color, font=self.font)
+
         else:  # cv2
             # print("cv2")
             if rotated:
