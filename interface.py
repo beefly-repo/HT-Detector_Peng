@@ -25,9 +25,9 @@ con_display_accuracy = 2 #可以更改
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #控制Con R G B三行的显示顺序
 Order_Con_R_G_B = 'ConRGB' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
-#控制No Con R G B五行显示的颜色
-color_No = (255, 0, 255) #可以更改
-color_Con = (255, 255, 0) #可以更改
+#控制No Con R G B五行显示的颜色,格式为(B,G,R)，0-255 (0, 0, 0)为黑色 (255, 255, 255)为白色
+color_No = (255, 0, 255) #可以更改 
+color_Con = (255, 255, 0) #可以更改 
 color_R = (0, 0, 255) #可以更改
 color_G = (0, 255, 0) #可以更改
 color_B = (255, 0, 0) #可以更改
