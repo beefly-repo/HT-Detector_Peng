@@ -437,7 +437,8 @@ class Model(nn.Module):
             x in ARGV for x in ("predict", "track", "mode=predict", "mode=track")
         )
 
-        custom = {"conf": 0.80, "batch": 1, "save": is_cli, "mode": "predict"}  # method defaults # original -> "conf": 0.25
+        from interface import detect_confidence, show_confidence
+        custom = {"conf": detect_confidence, "show_conf": show_confidence, "batch": 1, "save": is_cli, "mode": "predict"}  # method defaults
         args = {**self.overrides, **custom, **kwargs}  # highest priority args on the right
         # print("engine-model/args=:", args)
         prompts = args.pop("prompts", None)  # for SAM-type models

@@ -21,6 +21,10 @@ rgb_calculate_accuracy = 16 #可以更改
 #图片显示RGB和Con.的小数点位数，可以单独控制
 rgb_display_accuracy = 2 #可以更改
 con_display_accuracy = 2 #可以更改
+#置信度阈值，只有置信度>=该值才判定为目标物体
+detect_confidence = 0.8 #可以更改，范围0~1，值越大越严格
+#是否在标签上显示置信度数值
+show_confidence = False #True显示，False不显示
 #选择相应的颜色通道+++++++++++
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #控制Con R G B三行的显示顺序
