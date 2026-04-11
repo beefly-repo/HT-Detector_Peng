@@ -401,7 +401,7 @@ class Results(SimpleClass):
                     # print('xywh_con', x0_con, y0_con, x1_con, y1_con, w_con, h_con)
                 # calculate the average RGB values of a sample in one image
                 # r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
-                r_avg, g_avg, b_avg = self.calAvgRgb(annotator.im, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
+                r_avg, g_avg, b_avg = self.calAvgRgb(self.orig_img, x0_con, y0_con, w_con, h_con, rgb_calculate_accuracy)
 
                 # mark the concentration area
                 mybox = torch.tensor([x0_con, y0_con, x1_con, y1_con], device='cuda:0')
