@@ -5,6 +5,7 @@ import os
 linear_dir = os.path.join(os.getcwd(), 'custom/linear_detection/linear/') #不用更改
 detection_dir = os.path.join(os.getcwd(), 'custom/linear_detection/detection/') #不用更改
 results_dir = os.path.join(os.getcwd(), 'runs/detect/results/') #不用更改
+detect_weights_path = "weights/cuvette_Peng/yolov8n_train/weights/best.pt" #不用更改
 
 #选择框的左上角点位置
 x0_ratio = 3/8 #可以更改
@@ -28,7 +29,7 @@ show_confidence = False #True显示，False不显示
 #选择相应的颜色通道
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #控制Con R G B三行的显示顺序
-Order_Con_R_G_B = 'ConRGB' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
+Order_Con_R_G_B = 'ConGBR' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
 #控制No Con R G B五行显示的颜色,格式为(B,G,R)，数值从0-255； (0, 0, 0)为黑色 (255, 255, 255)为白色
 color_No = (255, 0, 255) #可以更改 
 color_Con = (255, 255, 0) #可以更改 

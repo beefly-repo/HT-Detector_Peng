@@ -1,6 +1,6 @@
 import os, shutil
 import detect
-from interface import linear_dir, detection_dir, results_dir, mode
+from interface import linear_dir, detection_dir, results_dir, detect_weights_path, mode
 
 # only delete the results directory at the linear regression stage
 if mode == 'linear':
@@ -12,8 +12,8 @@ if mode == 'linear':
         print(os.listdir(results_dir))
         shutil.rmtree(results_dir)
         os.makedirs(results_dir)
-    detect.detection(img_dir=linear_dir)
+    detect.detection(weight_path=detect_weights_path, img_dir=linear_dir)
 elif mode == 'detection':
-    detect.detection(img_dir=detection_dir)
+    detect.detection(weight_path=detect_weights_path, img_dir=detection_dir)
 else:
     raise NameError('Wrong MODE! The mode should be \'linear\' or \'detection\'')

@@ -2,9 +2,9 @@ from ultralytics import YOLO
 import os
 import time
 
-def detection(img_dir):
+def detection(weight_path, img_dir):
     #
-    model = YOLO("weights/cuvette_Peng/yolov8n_train/weights/best.pt")  # 加载预训练模型（建议用于训练）
+    model = YOLO(weight_path)  # 加载预训练模型（建议用于训练）
     file_names = os.listdir(img_dir)
     abs_file_names = []
     for file_name in file_names:
