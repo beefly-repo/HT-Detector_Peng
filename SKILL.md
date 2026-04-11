@@ -52,4 +52,18 @@ annotator = Annotator(
             example=names,
         )
 
+./ultralytics/engine/results.py 文件中的第403和404行中的两行包含6个变量：x0_con, y0_con, x1_con, y1_con，w_con, h_con，这些变量分别代表Con.框的左上角坐标（x0_con, y0_con）、右下角坐标（x1_con, y1_con）以及宽度（w_con）和高度（h_con）。这些变量的值是根据原始框的坐标（x0, y0, x1, y1）以及预设的比例（x0_ratio, y0_ratio, x1_ratio, y1_ratio）计算得出的。具体来说，x0_con和y0_con是通过将原始框的左上角坐标与预设比例进行加权平均计算得出的，而x1_con和y1_con则是通过将原始框的右下角坐标与预设比例进行加权平均计算得出的。最后，w_con和h_con分别是通过计算Con.框的宽度和高度得出的。这些变量在后续的代码中将被用来绘制Con.框以及显示相关信息。
+以下是第403和404行中相关代码片段：
+x0_con, y0_con, x1_con, y1_con = int(x1*x0_ratio+x0*(1-x0_ratio)), int(y1*y0_ratio+y0*(1-y0_ratio)), int(x1*x1_ratio+x0*(1-x1_ratio)), int(y1*y1_ratio+y0*(1-y1_ratio))
+w_con, h_con = (x1_con - x0_con), (y1_con - y0_con)
+
+./ultralytics/engine/results.py 文件中
+第615行：
+linear_reg_con_rgb_file = os.path.join(results_dir, 'linear_con_rgb.xlsx')
+和第649行：
+detection_file = os.path.join(results_dir, (os.path.split(detection_dict['Name'])[-1].split('.')[0] + '.xlsx')) # use '+' instead of use joint, because joint add '\'
+分别表示线性回归结果保存的文件路径和检测结果保存的文件路径。这些路径是通过将results_dir与相应的文件名进行拼接得到的。linear_reg_con_rgb_file表示线性回归结果保存的Excel文件路径，而detection_file表示检测结果保存的Excel文件路径，其中detection_dict['Name']是原始图像的文件名，通过os.path.split和字符串操作来生成对应的Excel文件名。这些文件路径将被用来保存线性回归结果和检测结果，以便后续查看和分析。
+在生成以上线性回归结果和检测结果的Excel文件时，将x0_con, y0_con, x1_con, y1_con，w_con, h_con这六个变量添加到相应的Excel文件中，以便在查看和分析线性回归结果和检测结果时能够同时看到Con.框的坐标和尺寸信息。这些变量可以帮助用户更好地理解检测结果与Con.框之间的关系，以及评估检测的准确性和性能。
+
+该程序中，已经将每个检测出来的识别区域中的Name	No.	Con.	Red	Green	Blue 保存起来了，在Blue列后面添加了六个新的列，分别是x0_con, y0_con, x1_con, y1_con，w_con, h_con，这些列分别保存了Con.框的左上角坐标（x0_con, y0_con）、右下角坐标（x1_con, y1_con）以及宽度（w_con）和高度（h_con）。这样，在查看和分析检测结果时，用户不仅可以看到每个识别区域的Name、No.、Con.、Red、Green、Blue等信息，还可以同时看到Con.框的坐标和尺寸信息，从而更全面地了解检测结果与Con.框之间的关系，以及评估检测的准确性和性能。要确保每个识别区域的Name	No.	Con.	Red	Green	Blue 和x0_con, y0_con, x1_con, y1_con，w_con, h_con结果一一对应。Blue列和x0_con列之间用一个空列分隔开，以便更清晰地区分原有的检测结果和新增的Con.框信息。
 

@@ -306,11 +306,13 @@ class Results(SimpleClass):
             # # print('formula file name: ', formula_file)
             coor_list = []
             # store all the sample information in each image for both linear stage and detection stage
-            linear_reg_dict = {'Name': str, 'No.': [], 'Con.': [], 'Red': [], 'Green': [], 'Blue': []}
+            linear_reg_dict = {'Name': str, 'No.': [], 'Con.': [], 'Red': [], 'Green': [], 'Blue': [],
+                               '': [], 'x0_con': [], 'y0_con': [], 'x1_con': [], 'y1_con': [], 'w_con': [], 'h_con': []}
             linear_reg_R_formula_dict = {'slope': [], 'intercept': [], 'r': [], 'R2': [], 'p': [], 'std_err': []}
             linear_reg_G_formula_dict = {'slope': [], 'intercept': [], 'r': [], 'R2': [], 'p': [], 'std_err': []}
             linear_reg_B_formula_dict = {'slope': [], 'intercept': [], 'r': [], 'R2': [], 'p': [], 'std_err': []}
-            detection_dict = {'Name': str, 'No.': [], 'Con.': [], 'Red': [], 'Green': [], 'Blue': []}
+            detection_dict = {'Name': str, 'No.': [], 'Con.': [], 'Red': [], 'Green': [], 'Blue': [],
+                              '': [], 'x0_con': [], 'y0_con': [], 'x1_con': [], 'y1_con': [], 'w_con': [], 'h_con': []}
             img_name = os.path.split(self.path)[-1].split('.')[0]
             linear_reg_dict['Name'] = img_name
             detection_dict['Name'] = img_name
@@ -420,6 +422,13 @@ class Results(SimpleClass):
                     linear_reg_dict['Red'].append(r_avg)
                     linear_reg_dict['Green'].append(g_avg)
                     linear_reg_dict['Blue'].append(b_avg)
+                    linear_reg_dict[''].append('')
+                    linear_reg_dict['x0_con'].append(x0_con)
+                    linear_reg_dict['y0_con'].append(y0_con)
+                    linear_reg_dict['x1_con'].append(x1_con)
+                    linear_reg_dict['y1_con'].append(y1_con)
+                    linear_reg_dict['w_con'].append(w_con)
+                    linear_reg_dict['h_con'].append(h_con)
 
                     # b_avg_list.append(b_avg)
                     # c_con = con_list[id-1]
@@ -430,6 +439,13 @@ class Results(SimpleClass):
                     detection_dict['Red'].append(r_avg)
                     detection_dict['Green'].append(g_avg)
                     detection_dict['Blue'].append(b_avg)
+                    detection_dict[''].append('')
+                    detection_dict['x0_con'].append(x0_con)
+                    detection_dict['y0_con'].append(y0_con)
+                    detection_dict['x1_con'].append(x1_con)
+                    detection_dict['y1_con'].append(y1_con)
+                    detection_dict['w_con'].append(w_con)
+                    detection_dict['h_con'].append(h_con)
 
 
                     # read the linear regression formula
