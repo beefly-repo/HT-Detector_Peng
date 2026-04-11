@@ -22,10 +22,10 @@ rgb_calculate_accuracy = 16 #可以更改
 #图片显示RGB和Con.的小数点位数，可以单独控制
 rgb_display_accuracy = 2 #可以更改
 con_display_accuracy = 2 #可以更改
-#选择相应的颜色通道+++++++++++
+#选择相应的颜色通道
 color_channel = 'G' # 'R' 'G' 'B' 三选一
 #控制Con R G B三行的显示顺序
-Order_Con_R_G_B = 'ConRGB' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
+Order_Con_R_G_B = 'ConGBR' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
 #控制No Con R G B五行显示的颜色,格式为(B,G,R)，数值从0-255； (0, 0, 0)为黑色 (255, 255, 255)为白色
 color_No = (255, 0, 255) #可以更改 
 color_Con = (255, 255, 0) #可以更改 
