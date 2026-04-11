@@ -23,6 +23,18 @@ rgb_display_accuracy = 2 #可以更改
 con_display_accuracy = 2 #可以更改
 #选择相应的颜色通道+++++++++++
 color_channel = 'G' # 'R' 'G' 'B' 三选一
+#控制Con R G B的显示顺序
+Order_Con_R_G_B = 'ConRGB' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
+#控制R G B行显示的颜色
+color_R = (0, 0, 255) #可以更改
+color_G = (0, 255, 0) #可以更改
+color_B = (255, 0, 0) #可以更改
+#控制No. 与cuvette之间的间距
+distance_between_No_cuvette = 50 #可以更改
+#控制cuvette和Con之间的间距
+distance_between_cuvette_Con = 50 #可以更改
+#控制Con、R、G、B之间的间距
+distance_between_Con_R_G_B = 10 #可以更改
 #是否添加指示灯
 add_light = False
 

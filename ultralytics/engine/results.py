@@ -279,7 +279,10 @@ class Results(SimpleClass):
             print('show_boxes=', show_boxes)
             from interface import (x0_ratio, y0_ratio, x1_ratio, y1_ratio, mode, con_list,
                                     rgb_calculate_accuracy,rgb_display_accuracy, con_display_accuracy,
-                                   color_channel, results_dir, add_light)
+                                   color_channel, results_dir, add_light,
+                                   Order_Con_R_G_B, color_R, color_G, color_B,
+                                   distance_between_No_cuvette, distance_between_cuvette_Con,
+                                   distance_between_Con_R_G_B)
             from scipy import stats
             import os, json
 
@@ -359,9 +362,9 @@ class Results(SimpleClass):
             # 注意：cuvette 标签文字绘制在框顶部之上，这里用 annotator 的字体来获取文字高度
             cuvette_label_h = annotator.font.getsize("cuvette")[1] if hasattr(annotator, 'font') else 40
             no_label_h = annotator.font.getsize("No.1")[1] if hasattr(annotator, 'font') else 40  # 新增
-            no_y = int(min(cuvette_y0_list)) - cuvette_label_h - 50 - no_label_h  # 修改：100 → 50，减去 No.1 文字高度
+            no_y = int(min(cuvette_y0_list)) - cuvette_label_h - distance_between_No_cuvette - no_label_h  # 使用 distance_between_No_cuvette 控制间距
             # 计算 Con. 的统一 y 坐标：所有 cuvette 框底部最大值 + 100
-            con_y = int(max(cuvette_y1_list)) + 50
+            con_y = int(max(cuvette_y1_list)) + distance_between_cuvette_Con
 
             # handle each sample in one image
             for coor in coor_list:
@@ -541,14 +544,27 @@ class Results(SimpleClass):
                 # print(id_dict[key])
                 # print(min([id_dict[key][1] for key in id_dict.keys()]))
 #改动5
-            # 统一绘制 Con./G/B/R 文字，使用 con_y 作为统一 y 坐标
-            txt_bias = 70
+            # 统一绘制 Con./R/G/B 文字，使用 con_y 作为统一 y 坐标
+            # 根据 Order_Con_R_G_B 控制显示顺序，根据 color_R/G/B 控制颜色
+            con_rgb_text_h = annotator.font.getsize("Con.")[1] if hasattr(annotator, 'font') else 60
+            txt_bias = con_rgb_text_h + distance_between_Con_R_G_B
+            # 定义 R/G/B 行的标签、数据索引、颜色
+            rgb_line_map = {
+                'R': ("R:", 2, color_R),
+                'G': ("G:", 3, color_G),
+                'B': ("B:", 4, color_B),
+            }
+            # 根据 Order_Con_R_G_B 解析 Con 之后的 R/G/B 顺序
+            # Order_Con_R_G_B 格式: 'ConRGB', 'ConRBG', 'ConGRB', 'ConGBR', 'ConBRG', 'ConBGR'
+            rgb_order = list(Order_Con_R_G_B[3:])  # 例如 'ConRGB' -> ['R', 'G', 'B']
             for key in con_dict.keys():
                 x = con_dict[key][0]
+                # Con. 始终第一行
                 annotator.text([x, con_y], "Con.:" + str(con_dict[key][1]), txt_color=(0, 0, 0))
-                annotator.text([x, con_y + txt_bias * 1], "R:" + str(con_dict[key][2]), txt_color=(255, 0, 0))
-                annotator.text([x, con_y + txt_bias * 2], "G:" + str(con_dict[key][3]), txt_color=(0, 128, 0))
-                annotator.text([x, con_y + txt_bias * 3], "B:" + str(con_dict[key][4]), txt_color=(0, 0, 255))
+                # 按顺序绘制 R/G/B
+                for i, ch in enumerate(rgb_order):
+                    label, idx, clr = rgb_line_map[ch]
+                    annotator.text([x, con_y + txt_bias * (i + 1)], label + str(con_dict[key][idx]), txt_color=clr)
 
             # light_dict
             if add_light:
