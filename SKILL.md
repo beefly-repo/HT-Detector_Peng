@@ -26,3 +26,11 @@ distance_between_Con_R_G_B = 10 #可以更改
 
 修改./ultralytics/engine/results.py 文件中的相关代码，使其能够根据这些变量来调整识别照片中各元素的显示顺序、颜色和间距。具体来说，可以在识别图片时，根据Order_Con_R_G_B变量来确定Con R G B三行的显示顺序（'ConRGB', 'ConRBG', 'ConGRB', 'ConGBR', 'ConBRG', 'ConBGR'分别代表不同的显示顺序），并使用color_R、color_G、color_B变量来分别设置R、G、B行的颜色。同时，使用distance_between_No_cuvette、distance_between_cuvette_Con、distance_between_Con_R_G_B变量来调整No.与cuvette之间的间距、cuvette和Con之间的间距以及Con、R、G、B之间的间距。这样，界面中的元素将根据这些变量的设置进行调整，以满足用户的需求。
 前提，保证不改变其他功能的前提下，进行上述修改。
+
+#控制No Con R G B五行显示的颜色
+color_No = (255, 255, 255) #可以更改
+color_Con = (255, 255, 255) #可以更改
+./interface.py 文件中新加了几个变量，分别是:
+- color_No：控制No.行显示的颜色，可以更改为其他RGB值。
+- color_Con：控制Con行显示的颜色，可以更改为其他RGB值。
+在./ultralytics/engine/results.py 文件中将导入./interface.py 文件中的新增的color_No和color_Con变量，并修改相关代码，使其能够根据这些变量来调整No.行和Con行的显示颜色。具体来说，在识别图片时，使用color_No变量来设置No.行的颜色，使用color_Con变量来设置Con行的颜色。这样，界面中的No.行和Con行将根据这些变量的设置进行调整，以满足用户的需求。同时，保证不改变其他功能的前提下进行上述修改。

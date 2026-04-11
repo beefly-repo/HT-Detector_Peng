@@ -23,9 +23,11 @@ rgb_display_accuracy = 2 #可以更改
 con_display_accuracy = 2 #可以更改
 #选择相应的颜色通道+++++++++++
 color_channel = 'G' # 'R' 'G' 'B' 三选一
-#控制Con R G B的显示顺序
+#控制Con R G B三行的显示顺序
 Order_Con_R_G_B = 'ConRGB' #'ConRGB,ConRBG,ConGRB,ConGBR,ConBRG,ConBGR' 多选一
-#控制R G B行显示的颜色
+#控制No Con R G B五行显示的颜色
+color_No = (255, 255, 255) #可以更改
+color_Con = (255, 255, 255) #可以更改
 color_R = (0, 0, 255) #可以更改
 color_G = (0, 255, 0) #可以更改
 color_B = (255, 0, 0) #可以更改

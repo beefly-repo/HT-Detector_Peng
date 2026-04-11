@@ -280,7 +280,7 @@ class Results(SimpleClass):
             from interface import (x0_ratio, y0_ratio, x1_ratio, y1_ratio, mode, con_list,
                                     rgb_calculate_accuracy,rgb_display_accuracy, con_display_accuracy,
                                    color_channel, results_dir, add_light,
-                                   Order_Con_R_G_B, color_R, color_G, color_B,
+                                   Order_Con_R_G_B, color_No, color_Con, color_R, color_G, color_B,
                                    distance_between_No_cuvette, distance_between_cuvette_Con,
                                    distance_between_Con_R_G_B)
             from scipy import stats
@@ -540,7 +540,7 @@ class Results(SimpleClass):
 
             # annotate the image with ids
             for key in id_dict.keys():
-                annotator.text(id_dict[key], "No." + key, txt_color=(0, 0, 0))
+                annotator.text(id_dict[key], "No." + key, txt_color=color_No)
                 # print(id_dict[key])
                 # print(min([id_dict[key][1] for key in id_dict.keys()]))
 #改动5
@@ -560,7 +560,7 @@ class Results(SimpleClass):
             for key in con_dict.keys():
                 x = con_dict[key][0]
                 # Con. 始终第一行
-                annotator.text([x, con_y], "Con.:" + str(con_dict[key][1]), txt_color=(0, 0, 0))
+                annotator.text([x, con_y], "Con.:" + str(con_dict[key][1]), txt_color=color_Con)
                 # 按顺序绘制 R/G/B
                 for i, ch in enumerate(rgb_order):
                     label, idx, clr = rgb_line_map[ch]
