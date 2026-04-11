@@ -34,3 +34,22 @@ color_Con = (255, 255, 255) #可以更改
 - color_No：控制No.行显示的颜色，可以更改为其他RGB值。
 - color_Con：控制Con行显示的颜色，可以更改为其他RGB值。
 在./ultralytics/engine/results.py 文件中将导入./interface.py 文件中的新增的color_No和color_Con变量，并修改相关代码，使其能够根据这些变量来调整No.行和Con行的显示颜色。具体来说，在识别图片时，使用color_No变量来设置No.行的颜色，使用color_Con变量来设置Con行的颜色。这样，界面中的No.行和Con行将根据这些变量的设置进行调整，以满足用户的需求。同时，保证不改变其他功能的前提下进行上述修改。
+
+
+#显示字体大小和类型
+output_font_size = 60 #可以更改
+output_font = "Arial.ttf" #可以更改
+
+在./ultralytics/engine/results.py 文件中将导入./interface.py 文件中的新增的output_font_size和output_font变量，并修改相关代码，使其能够根据这些变量来调整显示字体的大小和类型。
+相关原代码中控制字体大小和类型的代码是下面这几行：
+annotator = Annotator(
+            deepcopy(self.orig_img if img is None else img),
+            line_width,
+            font_size=60,
+            font="Arial.ttf",
+            # pil or (pred_probs is not None and show_probs),  # Classify tasks default to pil=True
+            pil=True,
+            example=names,
+        )
+
+

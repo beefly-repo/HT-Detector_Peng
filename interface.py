@@ -37,6 +37,9 @@ distance_between_No_cuvette = 50 #可以更改
 distance_between_cuvette_Con = 50 #可以更改
 #控制Con、R、G、B之间的间距
 distance_between_Con_R_G_B = 10 #可以更改
+#显示字体大小和类型
+output_font_size = 60 #可以更改
+output_font = "Arial.ttf" #可以更改
 #是否添加指示灯
 add_light = False
 

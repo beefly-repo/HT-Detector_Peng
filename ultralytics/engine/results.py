@@ -249,11 +249,12 @@ class Results(SimpleClass):
         pred_boxes, show_boxes = self.obb if is_obb else self.boxes, boxes
         pred_masks, show_masks = self.masks, masks
         pred_probs, show_probs = self.probs, probs
+        from interface import output_font_size, output_font
         annotator = Annotator(
             deepcopy(self.orig_img if img is None else img),
             line_width,
-            font_size=60,
-            font="Arial.ttf",
+            font_size=output_font_size,
+            font=output_font,
             # pil or (pred_probs is not None and show_probs),  # Classify tasks default to pil=True
             pil=True,
             example=names,
