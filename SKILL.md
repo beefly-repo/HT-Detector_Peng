@@ -67,3 +67,6 @@ detection_file = os.path.join(results_dir, (os.path.split(detection_dict['Name']
 
 该程序中，已经将每个检测出来的识别区域中的Name	No.	Con.	Red	Green	Blue 保存起来了，在Blue列后面添加了六个新的列，分别是x0_con, y0_con, x1_con, y1_con，w_con, h_con，这些列分别保存了Con.框的左上角坐标（x0_con, y0_con）、右下角坐标（x1_con, y1_con）以及宽度（w_con）和高度（h_con）。这样，在查看和分析检测结果时，用户不仅可以看到每个识别区域的Name、No.、Con.、Red、Green、Blue等信息，还可以同时看到Con.框的坐标和尺寸信息，从而更全面地了解检测结果与Con.框之间的关系，以及评估检测的准确性和性能。要确保每个识别区域的Name	No.	Con.	Red	Green	Blue 和x0_con, y0_con, x1_con, y1_con，w_con, h_con结果一一对应。Blue列和x0_con列之间用一个空列分隔开，以便更清晰地区分原有的检测结果和新增的Con.框信息。
 
+搜索一下程序，告诉我在进行线性公式计算的时候，我需要用到的数据是怎么来的，在哪些文件的哪行？高亮出来。不要修改代码
+
+我现在需要在interface.py中增加一个行矩阵，用来控制获取线性公式时所用到的数据点（x,y), x在con_list里面选取，y在用来计算线性公式的R/G/B数值，x和y一定要严格对应。新增的控制矩阵，长度和con_list保持一致，元素仅为0,1；0代表不选取该位置对应的(x,y)作为线性公式计算的数据点，1代表选取该位置对应的(x,y)作为线性公式计算的数据点。

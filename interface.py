@@ -17,6 +17,8 @@ y1_ratio = 6/8 #可以更改
 mode = 'detection' # 'linear' or 'detection' 可以更改只能选择这两个之一
 #获取线性公式时，需要手动输入浓度值，个数一定严格和比色皿数量比配
 con_list = [0, 0.01, 0.05, 0.1, 0.5, 1 ,2, 5, 10] #可以更改
+#获取线性公式时，控制每个(con, RGB)数据点是否参与线性回归；长度必须和con_list一致，0不选，1选
+linear_formula_point_matrix = [1, 1, 1, 1, 1, 1, 1, 1, 1] #可以更改
 #计算RGB平均值用到的小数点位数，如不提供程序默认16位
 rgb_calculate_accuracy = 16 #可以更改
 #图片显示RGB和Con.的小数点位数，可以单独控制

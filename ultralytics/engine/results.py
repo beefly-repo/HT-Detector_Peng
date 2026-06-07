@@ -278,7 +278,7 @@ class Results(SimpleClass):
         if pred_boxes is not None and show_boxes:
             print('my detect++++++------------------------------------')
             print('show_boxes=', show_boxes)
-            from interface import (x0_ratio, y0_ratio, x1_ratio, y1_ratio, mode, con_list,
+            from interface import (x0_ratio, y0_ratio, x1_ratio, y1_ratio, mode, con_list, linear_formula_point_matrix,
                                     rgb_calculate_accuracy,rgb_display_accuracy, con_display_accuracy,
                                    color_channel, results_dir, add_light,
                                    Order_Con_R_G_B, color_No, color_Con, color_R, color_G, color_B,
@@ -633,20 +633,33 @@ class Results(SimpleClass):
                     linear_reg_G_formula_file = os.path.join(results_dir, 'linear_formula_G.xlsx')
                     linear_reg_B_formula_file = os.path.join(results_dir, 'linear_formula_B.xlsx')
                     text = ['slope', 'intercept', 'r', 'R2', 'p', 'std_err']
+                    if len(linear_formula_point_matrix) != len(con_list):
+                        raise ValueError('linear_formula_point_matrix length must match con_list length')
+                    if any(point not in (0, 1) for point in linear_formula_point_matrix):
+                        raise ValueError('linear_formula_point_matrix values must be 0 or 1')
+                    if len(linear_reg_dict['Con.']) != len(linear_formula_point_matrix):
+                        raise ValueError('Detected linear data count must match linear_formula_point_matrix length')
+                    selected_point_indexes = [i for i, point in enumerate(linear_formula_point_matrix) if point == 1]
+                    if len(selected_point_indexes) < 2:
+                        raise ValueError('At least two selected points are required for linear regression')
+                    formula_con = [linear_reg_dict['Con.'][i] for i in selected_point_indexes]
+                    formula_red = [linear_reg_dict['Red'][i] for i in selected_point_indexes]
+                    formula_green = [linear_reg_dict['Green'][i] for i in selected_point_indexes]
+                    formula_blue = [linear_reg_dict['Blue'][i] for i in selected_point_indexes]
                     # save the linear regression formula of Red vs. Con. to the file ...linear_formula_R.xlsx
-                    slope, intercept, r, p, std_err = stats.linregress(linear_reg_dict['Con.'], linear_reg_dict['Red'])
+                    slope, intercept, r, p, std_err = stats.linregress(formula_con, formula_red)
                     paras = [slope, intercept, r, r * r, p, std_err]
                     for _, value in enumerate(zip(text, paras)): linear_reg_R_formula_dict[value[0]].append(value[1])
                     # print('linear_reg_R_formula_dict', linear_reg_R_formula_dict)
                     self.dictToexcel(linear_reg_R_formula_dict, linear_reg_R_formula_file)
                     # save the linear regression formula of Green vs. Con. to the file ...linear_formula_G.xlsx
-                    slope, intercept, r, p, std_err = stats.linregress(linear_reg_dict['Con.'], linear_reg_dict['Green'])
+                    slope, intercept, r, p, std_err = stats.linregress(formula_con, formula_green)
                     paras = [slope, intercept, r, r * r, p, std_err]
                     for _, value in enumerate(zip(text, paras)): linear_reg_G_formula_dict[value[0]].append(value[1])
                     # print('linear_reg_G_formula_dict', linear_reg_G_formula_dict)
                     self.dictToexcel(linear_reg_G_formula_dict, linear_reg_G_formula_file)
                     # save the linear regression formula of Blue vs. Con. to the file ...linear_formula_B.xlsx
-                    slope, intercept, r, p, std_err = stats.linregress(linear_reg_dict['Con.'], linear_reg_dict['Blue'])
+                    slope, intercept, r, p, std_err = stats.linregress(formula_con, formula_blue)
                     paras = [slope, intercept, r, r * r, p, std_err]
                     for _, value in enumerate(zip(text, paras)): linear_reg_B_formula_dict[value[0]].append(value[1])
                     # print('linear_reg_B_formula_dict', linear_reg_B_formula_dict)
